@@ -1,0 +1,27 @@
+#!/bin/sh
+
+if [ ! -f "./.env" ]; then
+    echo "This seems to be your first run"
+    echo "Please answer the following questions to initialize your dev environment"
+    echo "Answers will be recorded in the \".env\" file"
+
+    read -p "Enter your Google project OAuth 2.O client ID: " AUDIENCE
+    read -p "Enter your personal google account email (someone@gmail.com): " CLIENT_PRINCIPAL
+    read -p "Enter the google service account email (some.account@some.project.iam.gserviceaccount.com): " AGENT_PRINCIPAL
+
+    cat << EOF > .env
+AUDIENCE=$AUDIENCE
+CLIENT_PRINCIPAL=$CLIENT_PRINCIPAL
+AGENT_PRINCIPAL=$AGENT_PRINCIPAL
+
+EOF
+
+    echo "Initialization performed successfuly"
+fi
+
+. ./.env
+export AUDIENCE
+export CLIENT_PRINCIPAL
+export AGENT_PRINCIPAL
+
+./gradlew run "$@"
