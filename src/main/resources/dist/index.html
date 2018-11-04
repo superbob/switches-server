@@ -101,7 +101,9 @@
 
     function connectToWebSocket(idToken) {
       setServiceStatus("Connecting...");
-      clientWebSocket = new WebSocket("ws://" + location.hostname + (location.port ? ':' + location.port: '') + "/ws/client");
+      const isSSL = location.protocol === 'https:';
+      const wsProtocol = isSSL ? 'wss' : 'ws';
+      clientWebSocket = new WebSocket(wsProtocol + '://' + location.hostname + (location.port ? ':' + location.port: '') + "/ws/client");
       clientWebSocket.onopen = function(event) {
         this.onclose = function(event) {
           setServiceStatus("Connection closed. Refresh page to reconnect");
